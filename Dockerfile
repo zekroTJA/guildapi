@@ -7,6 +7,6 @@ RUN go build -v -o guildapi cmd/guildapi/main.go
 FROM alpine:latest AS final
 WORKDIR /app
 COPY --from=build /build/guildapi .
-EXPOSE ["80"]
+EXPOSE 80
 ENV BINDADDRESS=0.0.0.0:80
 ENTRYPOINT ["/app/guildapi"]
