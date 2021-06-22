@@ -17,6 +17,7 @@ func New(token string, redisClient *redis.Client) (s *Session, err error) {
 		return
 	}
 	s.session.StateEnabled = false
+	s.session.Identify.Intents = discordgo.IntentsGuilds | discordgo.IntentsGuildBans | discordgo.IntentsGuildMembers
 	s.state, err = dgrs.New(dgrs.Options{
 		RedisClient:    redisClient,
 		DiscordSession: s.session,
