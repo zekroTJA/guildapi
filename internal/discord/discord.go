@@ -16,6 +16,7 @@ func New(token string, redisClient *redis.Client) (s *Session, err error) {
 	if s.session, err = discordgo.New("Bot " + token); err != nil {
 		return
 	}
+	s.session.StateEnabled = false
 	s.state, err = dgrs.New(dgrs.Options{
 		RedisClient:    redisClient,
 		DiscordSession: s.session,
