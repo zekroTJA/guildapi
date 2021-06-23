@@ -1,6 +1,7 @@
 package web
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
@@ -65,6 +66,8 @@ func (w *Web) getGuild(c *fiber.Ctx) error {
 			g.OnlineMemberCount++
 		}
 	}
+
+	g.IconURL = fmt.Sprintf("https://cdn.discordapp.com/icons/%s/%s.png", g.ID, g.Icon)
 
 	include := strings.Split(c.Query("include", ""), ",")
 
