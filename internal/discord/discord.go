@@ -3,6 +3,7 @@ package discord
 import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/go-redis/redis/v8"
+	"github.com/sirupsen/logrus"
 	"github.com/zekrotja/dgrs"
 )
 
@@ -24,7 +25,12 @@ func New(token string, redisClient *redis.Client) (s *Session, err error) {
 
 	s.session.AddHandlerOnce(func(_ *discordgo.Session, e *discordgo.Ready) {
 		for _, g := range e.Guilds {
-			s.state.Members(g.ID, true)
+			ms, err := s.state.Members(g.ID, true)
+			if err != nil {
+				logrus.WithError(err).WithField("gid", g.ID).Error("Failed fetching guild members")
+			} else {
+				logrus.WithField("gid", g.ID).WithField("n", len(ms)).Info("Fetched guild members")
+			}
 		}
 	})
 
