@@ -34,9 +34,24 @@ func (w *Web) Open(address string) error {
 func (w *Web) getGuild(c *fiber.Ctx) error {
 	id := c.Params("id")
 
-	g, err := w.session.Guild(id)
+	_g, err := w.session.Guild(id)
 	if err != nil {
 		return err
+	}
+
+	g := &guildWrapper{Guild: _g}
+
+	if g.Members != nil {
+		g.TotalMemberCount = len(g.Members)
+		presences, err := w.session.Presences(g.ID)
+		if err != nil {
+			return err
+		}
+		for _, p := range presences {
+			if p.Status != discordgo.StatusOffline {
+				g.OnlineMemberCount++
+			}
+		}
 	}
 
 	include := strings.Split(c.Query("include", ""), ",")

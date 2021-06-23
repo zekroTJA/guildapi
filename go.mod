@@ -10,7 +10,9 @@ require (
 	github.com/joho/godotenv v1.3.0
 	github.com/sirupsen/logrus v1.8.1
 	github.com/stretchr/testify v1.7.0 // indirect
-	github.com/zekrotja/dgrs v0.0.0-20210622081942-957575941091
-	golang.org/x/sys v0.0.0-20210514084401-e8d321eab015 // indirect
+	github.com/zekrotja/dgrs v0.0.0-20210623075950-c5580484736d
+	go.opentelemetry.io/otel/internal/metric v0.21.0 // indirect
+	golang.org/x/crypto v0.0.0-20210616213533-5ff15b29337e // indirect
+	golang.org/x/sys v0.0.0-20210616094352-59db8d763f22 // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
 )

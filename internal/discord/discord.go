@@ -8,8 +8,9 @@ import (
 )
 
 type Session struct {
+	*dgrs.State
+
 	session *discordgo.Session
-	state   *dgrs.State
 }
 
 func New(token string, redisClient *redis.Client) (s *Session, err error) {
@@ -25,7 +26,7 @@ func New(token string, redisClient *redis.Client) (s *Session, err error) {
 
 	s.session.AddHandlerOnce(func(_ *discordgo.Session, e *discordgo.Ready) {
 		for _, g := range e.Guilds {
-			ms, err := s.state.Members(g.ID, true)
+			ms, err := s.State.Members(g.ID, true)
 			if err != nil {
 				logrus.WithError(err).WithField("gid", g.ID).Error("Failed fetching guild members")
 			} else {
@@ -34,7 +35,7 @@ func New(token string, redisClient *redis.Client) (s *Session, err error) {
 		}
 	})
 
-	s.state, err = dgrs.New(dgrs.Options{
+	s.State, err = dgrs.New(dgrs.Options{
 		RedisClient:    redisClient,
 		DiscordSession: s.session,
 		FetchAndStore:  true,
@@ -50,8 +51,4 @@ func (s *Session) Open() error {
 
 func (s *Session) Close() error {
 	return s.session.Close()
-}
-
-func (s *Session) Guild(id string) (g *discordgo.Guild, err error) {
-	return s.state.Guild(id)
 }
