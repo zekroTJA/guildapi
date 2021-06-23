@@ -17,7 +17,17 @@ func New(token string, redisClient *redis.Client) (s *Session, err error) {
 		return
 	}
 	s.session.StateEnabled = false
-	s.session.Identify.Intents = discordgo.IntentsGuilds | discordgo.IntentsGuildBans | discordgo.IntentsGuildMembers
+	s.session.Identify.Intents = discordgo.IntentsGuilds |
+		discordgo.IntentsGuildBans |
+		discordgo.IntentsGuildMembers |
+		discordgo.IntentsGuildPresences
+
+	s.session.AddHandlerOnce(func(_ *discordgo.Session, e *discordgo.Ready) {
+		for _, g := range e.Guilds {
+			s.state.Members(g.ID, true)
+		}
+	})
+
 	s.state, err = dgrs.New(dgrs.Options{
 		RedisClient:    redisClient,
 		DiscordSession: s.session,
