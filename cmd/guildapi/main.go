@@ -36,7 +36,7 @@ func main() {
 	}
 	defer dc.Close()
 
-	ws := web.New(dc)
+	ws := web.New(dc, cfg.AllowOrigins)
 	if err = ws.Open(cfg.BindAddress); err != nil {
 		logrus.Fatal("Failed opening web server: ", err)
 	}

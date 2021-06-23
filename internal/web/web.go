@@ -5,6 +5,7 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/zekrotja/guildapi/internal/discord"
 )
 
@@ -13,7 +14,7 @@ type Web struct {
 	app     *fiber.App
 }
 
-func New(session *discord.Session) (w *Web) {
+func New(session *discord.Session, alloworigins string) (w *Web) {
 	w = new(Web)
 
 	w.session = session
@@ -21,6 +22,12 @@ func New(session *discord.Session) (w *Web) {
 	w.app = fiber.New(fiber.Config{
 		GETOnly: true,
 	})
+
+	w.app.Use(cors.New(cors.Config{
+		AllowHeaders: "*",
+		AllowMethods: "OPTIONS, GET",
+		AllowOrigins: alloworigins,
+	}))
 
 	w.app.Get("/guilds/:id", w.getGuild)
 

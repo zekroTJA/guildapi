@@ -12,9 +12,10 @@ import (
 )
 
 type Config struct {
-	BindAddress string `config:"bindaddress"`
-	LogLevel    int    `config:"loglevel"`
-	Debug       bool   `config:"debug"`
+	BindAddress  string `config:"bindaddress"`
+	AllowOrigins string `config:"alloworigins"`
+	LogLevel     int    `config:"loglevel"`
+	Debug        bool   `config:"debug"`
 
 	DiscordToken string `config:"discord.token"`
 
@@ -25,9 +26,10 @@ type Config struct {
 }
 
 var defaultConfig = Config{
-	BindAddress: "0.0.0.0:80",
-	LogLevel:    int(logrus.InfoLevel),
-	Debug:       false,
+	BindAddress:  "0.0.0.0:80",
+	AllowOrigins: "*",
+	LogLevel:     int(logrus.InfoLevel),
+	Debug:        false,
 }
 
 func Load() (c Config, err error) {
