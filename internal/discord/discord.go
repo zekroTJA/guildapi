@@ -35,11 +35,14 @@ func New(token string, redisClient *redis.Client) (s *Session, err error) {
 		}
 	})
 
+	s.session.AddHandler(func(_ *discordgo.Session, e *discordgo.Ready) {
+		s.session.UserUpdateStatus(discordgo.StatusOffline)
+	})
+
 	s.State, err = dgrs.New(dgrs.Options{
 		RedisClient:    redisClient,
 		DiscordSession: s.session,
 		FetchAndStore:  true,
-		FlushOnStartup: true,
 		KeyPrefix:      "guildapi",
 	})
 	return
